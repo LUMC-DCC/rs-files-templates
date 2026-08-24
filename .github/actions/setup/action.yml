@@ -1,0 +1,38 @@
+name: Set up Python and Poetry
+description: Install Python and Poetry, then install the requested dependency groups.
+
+inputs:
+  python-version:
+    description: Python version to install.
+    required: false
+    default: "3.14"
+  groups:
+    description: Comma-separated Poetry dependency groups to install alongside main dependencies.
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v7
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install Poetry
+      shell: bash
+      run: pipx install poetry
+
+    - uses: actions/cache@v6
+      with:
+        path: ~/.cache/pypoetry
+        key: poetry-${{ runner.os }}-py${{ inputs.python-version }}-${{ hashFiles('poetry.lock') }}
+        restore-keys: poetry-${{ runner.os }}-py${{ inputs.python-version }}-
+
+    - name: Install project
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.groups }}" ]; then
+          poetry install --with "${{ inputs.groups }}"
+        else
+          poetry install
+        fi
