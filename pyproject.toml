@@ -1,0 +1,90 @@
+[project]
+name = "rs-files-templates"
+version = "0.1.0"
+description = "Reusable typed templates and renderers for research-software project files."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.14,<4.0"
+keywords = ["metadata", "pydantic", "research-software", "templates"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+authors = [
+    # ORCID: https://orcid.org/0000-0002-0852-4752
+    { name = "Mariia Steeghs-Turchina", email = "m.a.steeghs-turchina@lumc.nl" },
+]
+maintainers = [
+    # ORCID: https://orcid.org/0000-0002-0852-4752
+    { name = "Mariia Steeghs-Turchina", email = "m.a.steeghs-turchina@lumc.nl" },
+    # ORCID: https://orcid.org/0000-0002-9839-5439
+    { name = "Anna Niehues", email = "a.niehues@lumc.nl" },
+]
+dependencies = [
+    "jinja2>=3.1.6,<4.0",
+    "jsonschema>=4.25,<5.0",
+    "pydantic>=2.13,<3.0",
+    "pyyaml>=6.0.2,<7.0",
+    "referencing>=0.36,<1.0",
+    "rsm-schema @ git+https://github.com/lumc-dcc/rsm-schema.git@main",
+]
+
+[project.urls]
+Homepage = "https://lumc-dcc.github.io/rs-files-templates/"
+Repository = "https://github.com/LUMC-DCC/rs-files-templates"
+Issues = "https://github.com/LUMC-DCC/rs-files-templates/issues"
+Documentation = "https://lumc-dcc.github.io/rs-files-templates/"
+
+[tool.poetry]
+packages = [{ include = "rs_files_templates", from = "src" }]
+include = [
+    { path = "src/rs_files_templates/templates", format = ["sdist", "wheel"] },
+]
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = ">=4.2,<5.0"
+pytest = ">=8.4,<10.0"
+pytest-cov = ">=6.2,<8.0"
+ruff = ">=0.12,<1.0"
+
+[tool.poetry.group.docs.dependencies]
+sphinx = ">=8.2,<9.0"
+myst-parser = ">=4.0,<5.0"
+sphinx-book-theme = ">=1.4,<2.0"
+sphinx-copybutton = ">=0.5,<1.0"
+sphinxcontrib-mermaid = ">=1.0,<2.0"
+
+[build-system]
+requires = ["poetry-core>=2.0,<3.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+markers = ["network: tests requiring external schema access"]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.coverage.run]
+source = ["rs_files_templates"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true

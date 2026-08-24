@@ -1,0 +1,19 @@
+# Legal and licensing
+
+{% if model.licensing.license %}This project is licensed under `{{ model.licensing.license }}`. See the project
+license file for the complete terms.
+{% else %}No license has been supplied in the project metadata.
+{% endif %}{% if model.access.type or model.access.details %}
+
+## Access
+
+{% if model.access.type %}**Access type:** {{ model.access.type }}.
+{% endif %}{% if model.access.details %}{{ model.access.details }}
+{% endif %}{% endif %}{% if (model.regulatory_requirements.selected and model.regulatory_requirements.selected.entries) or model.regulatory_requirements.additional %}
+
+## Regulatory requirements
+
+{% if model.regulatory_requirements.selected %}{% for requirement in model.regulatory_requirements.selected.entries %}- {{ requirement }}
+{% endfor %}{% endif %}{% if model.regulatory_requirements.additional %}
+{{ model.regulatory_requirements.additional }}
+{% endif %}{% endif %}

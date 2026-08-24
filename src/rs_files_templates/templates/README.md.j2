@@ -1,0 +1,154 @@
+# {{ model.title }}
+
+{% if model.project.project_short_description %}{{ model.project.project_short_description }}
+{% endif %}{% if model.publication_note %}
+
+{{ model.publication_note }}
+{% endif %}{% if model.project.urls.homepage and model.project.urls.homepage != model.project.urls.repository %}
+
+Homepage: {{ model.project.urls.homepage }}
+{% endif %}{% if model.project.urls.documentation %}
+
+Documentation: {{ model.project.urls.documentation }}
+{% endif %}
+
+## Purpose
+
+{% if model.project.project_long_description %}{{ model.project.project_long_description }}
+
+{% endif %}{% if model.project.motivation.purpose %}{{ model.project.motivation.purpose }}
+{% elif not model.project.project_long_description and model.project.project_short_description %}{{ model.project.project_short_description }}
+{% elif not model.project.project_long_description %}The purpose of this software has not yet been documented.
+{% endif %}{% if model.purpose_categories %}
+
+## Purpose Categories
+
+{% for category in model.purpose_categories %}- {{ category }}
+{% endfor %}{% endif %}
+{% if model.project.topics.entries %}
+
+## Research Topics
+
+{% for topic in model.project.topics.entries %}- {% if topic.uri and topic.term %}[{{ topic.term }}]({{ topic.uri }}){% elif topic.term %}{{ topic.term }}{% else %}{{ topic.uri }}{% endif %}
+{% endfor %}{% endif %}
+
+## Intended Audience
+
+{% if model.project.audiences.entries %}{% for audience in model.project.audiences.entries %}- {{ audience }}
+{% endfor %}{% else %}The intended audience has not yet been documented.
+{% endif %}
+
+## Installation
+
+{% if model.installation_command %}{{ model.installation_text }}
+
+```{{ model.installation_language }}
+{{ model.installation_command }}
+```
+{% elif model.project.urls.documentation %}See the [project documentation]({{ model.project.urls.documentation }}) for installation instructions.
+{% else %}Installation instructions are not available in the supplied metadata.
+{% endif %}
+
+## Usage
+
+{% if model.usage_command %}```{{ model.usage_language }}
+{{ model.usage_command }}
+```
+{% elif model.project.urls.documentation %}See the [project documentation]({{ model.project.urls.documentation }}) for usage instructions.
+{% else %}A runnable command has not yet been supplied in the software-function metadata.
+{% endif %}{% if model.functions_section %}
+
+{{ model.functions_section }}
+{% endif %}{% if model.documentation %}
+
+## Documentation
+
+{% for item in model.documentation %}- {{ item }}
+{% endfor %}{% endif %}
+
+## Citation
+
+{% if model.citation_file %}If you use this software, cite it using [`{{ model.citation_file }}`]({{ model.citation_file }}).
+{% else %}When citing this software, include **{{ model.title }}**{% if model.project.versioning.version %} version `{{ model.project.versioning.version }}`{% endif %}{% if model.project.urls.repository %} and its [source repository]({{ model.project.urls.repository }}){% endif %}.
+{% endif %}{% if model.doi %}
+
+Software DOI: [{{ model.doi }}](https://doi.org/{{ model.doi }})
+{% endif %}{% if model.preferred_publication %}
+
+Associated publication: {% if model.preferred_publication.url %}[{{ model.preferred_publication.label }}]({{ model.preferred_publication.url }}){% else %}{{ model.preferred_publication.label }}{% endif %}
+{% endif %}
+
+## Support
+
+{% if model.support_file %}Support and contact options are documented in [`{{ model.support_file }}`]({{ model.support_file }}).
+{% endif %}{% if model.project.support_routes.entries %}{% for route in model.project.support_routes.entries %}- {% if route.url %}[{{ route.system or "Support" }}]({{ route.url }}){% else %}{{ route.system }}{% endif %}
+{% endfor %}{% elif model.project.contacts.community %}{% if model.project.contacts.community.startswith("http://") or model.project.contacts.community.startswith("https://") %}[Community support]({{ model.project.contacts.community }})
+{% else %}Community support: {{ model.project.contacts.community }}
+{% endif %}{% elif not model.support_file %}Support routes have not yet been documented.
+{% endif %}{% if model.project.access.type or model.project.access.details %}
+
+## Access
+
+{% if model.project.access.type %}**Access type:** {{ model.project.access.type }}.
+{% endif %}{% if model.project.access.details %}{% if model.project.access.details.startswith("http://") or model.project.access.details.startswith("https://") %}[Access details]({{ model.project.access.details }})
+{% else %}{{ model.project.access.details }}
+{% endif %}{% endif %}{% endif %}{% if model.platforms %}
+
+## Platform support
+
+{% for platform in model.platforms %}- {{ platform }}
+{% endfor %}{% endif %}{% if model.related_software %}
+
+## Related Software
+
+{% for software in model.related_software %}- {{ software }}
+{% endfor %}{% endif %}{% if model.project.resource_requirements and not model.documentation %}
+
+## Resource requirements
+
+{{ model.project.resource_requirements }}
+{% endif %}{% if not model.documentation and (model.project.maintenance_level or model.project.continuity_plan or model.project.retirement_criteria.entries) %}
+
+## Sustainability
+
+{% if model.project.maintenance_level %}**Maintenance level:** {{ model.project.maintenance_level }}.
+{% endif %}{% if model.project.continuity_plan %}
+{{ model.project.continuity_plan }}
+{% endif %}{% if model.project.retirement_criteria.entries %}
+
+Retirement may be considered when:
+{% for criterion in model.project.retirement_criteria.entries %}- {{ criterion }}
+{% endfor %}{% endif %}{% endif %}{% if not model.documentation and (model.project.contacts.security or model.project.security_measures.selected or model.project.security_measures.additional or model.project.data_management.sensitive_data_statement or model.project.data_management.dmp_reference or model.project.public_risk_notes) %}
+
+## Security and data
+
+{% if model.project.contacts.security %}Security contact: {{ model.project.contacts.security }}
+{% endif %}{% if model.project.security_measures.selected %}{% for measure in model.project.security_measures.selected.entries %}- {{ measure }}
+{% endfor %}{% endif %}{% if model.project.security_measures.additional %}{{ model.project.security_measures.additional }}
+{% endif %}{% if model.project.data_management.sensitive_data_statement %}{{ model.project.data_management.sensitive_data_statement }}
+{% endif %}{% if model.project.data_management.dmp_reference %}Data management plan: {{ model.project.data_management.dmp_reference }}
+{% endif %}{% if model.project.public_risk_notes %}{{ model.project.public_risk_notes }}
+{% endif %}{% endif %}
+
+## Legal and Licensing
+
+{% if model.project.licensing.license %}{% if "\n" in model.project.licensing.license or " " in model.project.licensing.license %}This project uses custom terms in `{{ model.license_file }}`.
+{% else %}This project is licensed under `{{ model.project.licensing.license }}`. See `{{ model.license_file }}` for the full license text.
+{% endif %}
+{% else %}No license has been supplied in the project metadata.
+{% endif %}{% if model.development.setup or model.development.checks or "CONTRIBUTING.md" in model.project.community_files.entries %}
+
+## Development
+
+{% if model.development.setup %}Set up the development environment with:
+
+```bash
+{{ model.development.setup }}
+```
+{% endif %}{% if model.development.checks %}Run the configured checks:
+
+```bash
+{% for command in model.development.checks %}{{ command }}
+{% endfor %}```
+{% endif %}{% if "CONTRIBUTING.md" in model.project.community_files.entries %}See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the contribution and code-review policy.
+{% endif %}{% endif %}

@@ -1,0 +1,57 @@
+# Governance
+
+{% if model.governance_notes %}
+{{ model.governance_notes }}
+
+{% endif %}
+## Roles
+
+{% if model.maintainer_lines %}
+Maintainers are responsible for day-to-day project decisions, review, releases,
+and support:
+
+{% for line in model.maintainer_lines %}
+- {{ line }}
+{% endfor %}
+{% else %}
+Maintainers are responsible for day-to-day project decisions, review, releases,
+and support.
+
+{% endif %}
+{% if model.principal_investigator_lines %}
+Principal investigators provide scientific or institutional oversight:
+
+{% for line in model.principal_investigator_lines %}
+- {{ line }}
+{% endfor %}
+{% endif %}
+## Decision making
+
+Routine decisions are made by maintainer consensus. Larger changes, releases,
+governance changes, and changes that affect users should be discussed in a pull
+request or issue before implementation.
+
+When consensus is not possible, maintainers should document the disagreement,
+choose the lowest-risk option for users, and escalate to project leadership or
+institutional support when needed.
+
+## Release responsibility
+
+Maintainers decide when a release is ready, confirm that checks pass, update the
+changelog, and publish release metadata.
+
+{% if model.continuity_plan %}
+## Continuity
+
+{{ model.continuity_plan }}
+
+{% endif %}
+{% if model.retirement_criteria %}
+## Retirement
+
+The project may be retired when one or more of these conditions apply:
+
+{% for criterion in model.retirement_criteria %}
+- {{ criterion }}
+{% endfor %}
+{% endif %}

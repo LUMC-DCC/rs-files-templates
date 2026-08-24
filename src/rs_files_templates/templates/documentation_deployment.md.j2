@@ -1,0 +1,15 @@
+# Deployment notes
+
+Deployment requirements are described by the project's supported platforms,
+dependencies, services, containers, and public resource requirements.
+{% if model.resource_requirements %}
+
+## Resource requirements
+
+{{ model.resource_requirements }}
+{% endif %}{% if model.containerization.entries %}
+
+## Containers
+
+{% for container in model.containerization.entries %}- **{{ container.type }}**{% if container.details %}: {{ container.details }}{% endif %}
+{% endfor %}{% endif %}

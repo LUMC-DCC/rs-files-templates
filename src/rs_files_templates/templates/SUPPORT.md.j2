@@ -1,0 +1,41 @@
+# Support
+
+{% if model.urls.documentation or model.contacts.community or model.support_routes.entries %}
+## Routes
+
+| Need | Route |
+| --- | --- |
+{% if model.urls.documentation %}
+| Documentation | {{ model.urls.documentation }} |
+{% endif %}
+{% if model.contacts.community %}
+| Community contact | {{ model.contacts.community }} |
+{% endif %}
+{% for route in model.support_routes.entries %}
+| {{ route.system }} | {{ route.url if route.url is defined and route.url else "Contact the maintainers" }} |
+{% endfor %}
+
+{% else %}
+Contact the project maintainers for support.
+
+{% endif %}
+Use the issue templates for bug reports and feature requests when they are
+available.
+
+## What to include
+
+When asking for help, include:
+
+- version or commit
+- operating system and environment details
+- command, input, or workflow that failed
+- expected behavior
+- observed behavior and full error message
+
+{% if model.maintenance_level %}
+## Maintenance level
+
+{{ model.maintenance_level }}
+
+{% endif %}
+Support is limited to the public maintenance commitment for this project.

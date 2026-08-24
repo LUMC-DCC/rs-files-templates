@@ -1,0 +1,43 @@
+{
+  "@context": [
+    "https://w3id.org/codemeta/3.1",
+    {"schema": "https://schema.org/"}
+  ],
+  "@type": "SoftwareSourceCode",
+  "name": {{ model.project_name | tojson }},
+  "description": {{ model.description | tojson }},
+  "version": {{ model.version | tojson }},
+  "developmentStatus": {{ model.development_status | tojson }},
+  "applicationCategory": {{ model.application_category | tojson }},
+{% if model.application_subcategory %}
+  "applicationSubCategory": {{ model.application_subcategory | tojson }},
+{% endif %}
+  "schema:featureList": {{ model.feature_list | tojson }},
+  "programmingLanguage": {{ model.programming_languages | tojson }},
+  "author": {{ model.authors | tojson }},
+  "identifier": {{ model.identifiers | tojson }}{% if model.maintainers %},
+  "maintainer": {{ model.maintainers | tojson }}{% endif %}{% if model.principal_investigators %},
+  "contributor": {{ model.principal_investigators | tojson }}{% endif %}{% if model.keywords %},
+  "keywords": {{ model.keywords | tojson }}{% endif %},
+  "codeRepository": {{ model.code_repository | tojson }}{% if model.continuous_integration %},
+  "continuousIntegration": {{ model.continuous_integration | tojson }}{% endif %},
+  "license": {{ model.license | tojson }}{% if model.is_accessible_for_free is not none %},
+  "isAccessibleForFree": {{ model.is_accessible_for_free | tojson }}{% endif %}{% if model.usage_info %},
+  "schema:usageInfo": {{ model.usage_info | tojson }}{% endif %}{% if model.url %},
+  "url": {{ model.url | tojson }}{% endif %}{% if model.software_help %},
+  "softwareHelp": {"@type": "CreativeWork", "url": {{ model.software_help | tojson }}}{% endif %}{% if model.issue_tracker %},
+  "issueTracker": {{ model.issue_tracker | tojson }}{% endif %}{% if model.release_notes %},
+  "releaseNotes": {{ model.release_notes | tojson }}{% endif %}{% if model.runtime_platforms %},
+  "runtimePlatform": {{ model.runtime_platforms | tojson }}{% endif %}{% if model.operating_systems %},
+  "operatingSystem": {{ model.operating_systems | tojson }}{% endif %}{% if model.software_requirements %},
+  "softwareRequirements": {{ model.software_requirements | tojson }}{% endif %}{% if model.supporting_data %},
+  "supportingData": {{ model.supporting_data | tojson }}{% endif %}{% if model.funders %},
+  "funder": [
+{% for funder in model.funders %}
+    {{ funder | tojson }}{{ "," if not loop.last else "" }}
+{% endfor %}
+  ]{% endif %}{% if model.funding_values %},
+  "funding": {{ model.funding_values | tojson }}{% endif %}{% if model.related_links %},
+  "relatedLink": {{ model.related_links | tojson }}{% endif %}{% if model.same_as %},
+  "sameAs": {{ model.same_as | tojson }}{% endif %}{% if model.reference_publications %},
+  "referencePublication": {{ model.reference_publications | tojson }}{% endif %}{{ "\n" }}}

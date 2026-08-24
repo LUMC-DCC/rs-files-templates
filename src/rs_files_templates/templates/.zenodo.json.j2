@@ -1,0 +1,19 @@
+{
+  "title": {{ model.title | tojson }},
+  "description": {{ model.description | tojson }},
+  "creators": [
+{% for creator in model.creators %}
+    {{ creator | tojson }}{{ "," if not loop.last else "" }}
+{% endfor %}
+  ],
+  "upload_type": "software",
+  "access_right": "open"{% if model.license %},
+  "license": {{ model.license | tojson }}{% endif %}{% if model.keywords %},
+  "keywords": {{ model.keywords | tojson }}{% endif %}{% if model.contributors %},
+  "contributors": [
+{% for contributor in model.contributors %}
+    {{ contributor | tojson }}{{ "," if not loop.last else "" }}
+{% endfor %}
+  ]{% endif %}{% if model.grants %},
+  "grants": {{ model.grants | tojson }}{% endif %}{% if model.related_identifiers %},
+  "related_identifiers": {{ model.related_identifiers | tojson }}{% endif %}{{ "\n" }}}

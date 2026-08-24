@@ -1,0 +1,30 @@
+# Developer guide
+
+## Architecture
+
+The project metadata describes its public functions, interfaces, quality tools,
+and collaboration policy. Keep implementation code and tests in clearly owned
+locations, and keep generated public files synchronized with that metadata.
+
+## Development setup
+
+{% if model.setup %}```bash
+{{ model.setup }}
+```
+{% else %}No project-manager setup command is available in the supplied metadata.
+{% endif %}{% if model.checks %}
+
+## Local checks
+
+| Check | Command |
+| --- | --- |
+{% for check in model.checks %}| {{ check.name }} | `{{ check.command }}` |
+{% endfor %}{% endif %}{% if model.code_review_policy %}
+
+## Code review
+
+{{ model.code_review_policy }}
+{% endif %}{% if "CONTRIBUTING.md" in model.community_files.entries %}
+
+See `CONTRIBUTING.md` in the repository root for the complete contribution policy.
+{% endif %}

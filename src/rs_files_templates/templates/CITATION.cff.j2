@@ -1,0 +1,57 @@
+cff-version: "1.2.0"
+message: "If you use this software, please cite it using the metadata in this file."
+title: {{ model.project_name | tojson }}
+type: software
+version: {{ model.version | tojson }}
+{% if model.abstract %}abstract: {{ model.abstract | tojson }}
+{% endif %}{% if model.repository_url %}repository-code: {{ model.repository_url | tojson }}
+{% endif %}{% if model.url %}url: {{ model.url | tojson }}
+{% endif %}authors:
+{% for author in model.authors %}
+  - {% if author.family_names %}family-names: {{ author.family_names | tojson }}
+{% if author.given_names %}    given-names: {{ author.given_names | tojson }}
+{% endif %}{% else %}name: {{ author.name | tojson }}
+{% endif %}{% if author.affiliation %}    affiliation: {{ author.affiliation | tojson }}
+{% endif %}{% if author.email %}    email: {{ author.email | tojson }}
+{% endif %}{% if author.orcid %}    orcid: {{ author.orcid | tojson }}
+{% endif %}{% if author.website %}    website: {{ author.website | tojson }}
+{% endif %}{% endfor %}{% if not model.authors %}  - name: "Project team"
+{% endif %}{% if model.maintainers %}contact:
+{% for maintainer in model.maintainers %}  - {% if maintainer.family_names %}family-names: {{ maintainer.family_names | tojson }}
+{% if maintainer.given_names %}    given-names: {{ maintainer.given_names | tojson }}
+{% endif %}{% else %}name: {{ maintainer.name | tojson }}
+{% endif %}{% if maintainer.affiliation %}    affiliation: {{ maintainer.affiliation | tojson }}
+{% endif %}{% if maintainer.email %}    email: {{ maintainer.email | tojson }}
+{% endif %}{% if maintainer.orcid %}    orcid: {{ maintainer.orcid | tojson }}
+{% endif %}{% if maintainer.website %}    website: {{ maintainer.website | tojson }}
+{% endif %}{% endfor %}{% endif %}{% if model.keywords %}keywords:
+{% for keyword in model.keywords %}  - {{ keyword | tojson }}
+{% endfor %}{% endif %}{% if model.identifiers %}identifiers:
+{% for identifier in model.identifiers %}  - type: {{ identifier.type | tojson }}
+    value: {{ identifier.value | tojson }}
+{% if identifier.description %}    description: {{ identifier.description | tojson }}
+{% endif %}{% endfor %}{% endif %}{% if model.preferred_citation %}preferred-citation:
+  type: {{ model.preferred_citation.type | tojson }}
+  title: {{ model.preferred_citation.title | tojson }}
+{% if model.preferred_citation.authors %}  authors:
+{% for author in model.preferred_citation.authors %}    - {% if author.family_names %}family-names: {{ author.family_names | tojson }}
+{% if author.given_names %}      given-names: {{ author.given_names | tojson }}
+{% endif %}{% else %}name: {{ author.name | tojson }}
+{% endif %}{% endfor %}{% endif %}{% if model.preferred_citation.doi %}  doi: {{ model.preferred_citation.doi | tojson }}
+{% endif %}{% if model.preferred_citation.url %}  url: {{ model.preferred_citation.url | tojson }}
+{% endif %}{% endif %}{% if model.references %}references:
+{% for reference in model.references %}  - type: {{ reference.type | tojson }}
+    title: {{ reference.title | tojson }}
+{% if reference.authors %}    authors:
+{% for author in reference.authors %}      - {% if author.family_names %}family-names: {{ author.family_names | tojson }}
+{% if author.given_names %}        given-names: {{ author.given_names | tojson }}
+{% endif %}{% else %}name: {{ author.name | tojson }}
+{% endif %}{% endfor %}{% endif %}{% if reference.doi %}    doi: {{ reference.doi | tojson }}
+{% endif %}{% if reference.pmcid %}    pmcid: {{ reference.pmcid | tojson }}
+{% endif %}{% if reference.url %}    url: {{ reference.url | tojson }}
+{% endif %}{% if reference.pmid %}    identifiers:
+      - type: "other"
+        value: {{ ("PMID:" ~ reference.pmid) | tojson }}
+        description: "PMID"
+{% endif %}{% if reference.note %}    notes: {{ reference.note | tojson }}
+{% endif %}{% endfor %}{% endif %}

@@ -1,0 +1,21 @@
+# {{ model.project_name or model.project_slug or "Project" }} overview
+
+{% if model.project_long_description %}{{ model.project_long_description }}
+{% elif model.project_short_description %}{{ model.project_short_description }}
+{% else %}A project description has not yet been supplied.
+{% endif %}{% if model.motivation.purpose %}
+
+## Purpose
+
+{{ model.motivation.purpose }}
+{% endif %}{% if model.topics.entries %}
+
+## Research topics
+
+{% for topic in model.topics.entries %}- {% if topic.uri and topic.term %}[{{ topic.term }}]({{ topic.uri }}){% elif topic.term %}{{ topic.term }}{% else %}{{ topic.uri }}{% endif %}
+{% endfor %}{% endif %}{% if model.audiences.entries %}
+
+## Intended audience
+
+{% for audience in model.audiences.entries %}- {{ audience }}
+{% endfor %}{% endif %}

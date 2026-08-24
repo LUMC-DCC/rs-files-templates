@@ -1,0 +1,79 @@
+# Security
+
+## Supported versions
+
+| Version | Supported |
+| --- | --- |
+| Current release | Yes |
+| Older releases | Best effort |
+
+## Reporting a vulnerability
+
+Do not report sensitive security issues in public issue trackers, discussions,
+pull requests, or public forks.
+
+{% if model.contacts.security %}
+Report suspected vulnerabilities privately to: {{ model.contacts.security }}
+{% elif model.has_maintainers %}
+Report suspected vulnerabilities privately to the project maintainers listed in
+the project metadata.
+{% else %}
+Report suspected vulnerabilities privately to the project maintainers.
+{% endif %}
+
+Include:
+
+- affected version, branch, or commit
+- operating system and relevant environment details
+- steps to reproduce
+- observed impact
+- proof of concept or logs when safe to share privately
+
+## Handling reports
+
+Maintainers acknowledge reports, investigate privately, coordinate fixes, and
+publish public details only after disclosure is appropriate.
+
+{% if model.security_measures.selected.entries %}
+## Security measures
+
+{% for measure in model.security_measures.selected.entries %}
+- {{ measure }}
+{% endfor %}
+
+{% endif %}
+{% if model.security_measures.additional %}
+## Additional security measures
+
+{{ model.security_measures.additional }}
+
+{% endif %}
+{% if model.data_management.sensitive_data_statement %}
+## Sensitive data
+
+{{ model.data_management.sensitive_data_statement }}
+
+{% endif %}
+{% if model.public_risk_notes %}
+## Public risk notes
+
+{{ model.public_risk_notes }}
+
+{% endif %}
+{% if model.regulatory_requirements.selected.entries or model.regulatory_requirements.additional %}
+## Regulatory and policy requirements
+
+{% for requirement in model.regulatory_requirements.selected.entries %}
+- {{ requirement }}
+{% endfor %}
+{% if model.regulatory_requirements.additional %}
+
+{{ model.regulatory_requirements.additional }}
+{% endif %}
+
+{% endif %}
+{% if model.data_management.dmp_reference %}
+## Data management reference
+
+{{ model.data_management.dmp_reference }}
+{% endif %}

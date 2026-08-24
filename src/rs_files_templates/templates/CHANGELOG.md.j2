@@ -1,0 +1,43 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/2.0.0/).
+{% if model.versioning.scheme %}
+This project uses {{ model.versioning.scheme }} for versions.
+{% if model.versioning.scheme_details %}
+Policy details: {{ model.versioning.scheme_details }}
+{% endif %}
+{% endif %}
+
+{% if model.versioning.release_frequency %}
+Expected release cadence: {{ model.versioning.release_frequency }}
+
+{% endif %}
+{% if model.distribution_channels.entries %}
+Release channels:
+
+{% for channel in model.distribution_channels.entries %}
+- {{ channel }}
+{% endfor %}
+
+{% endif %}
+## [Unreleased]
+
+### Added
+
+- Initial project scaffold.
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+{% if model.urls.repository %}
+[Unreleased]: {{ model.urls.repository }}/compare/v{{ model.versioning.version or "0.1.0" }}...HEAD
+{% endif %}

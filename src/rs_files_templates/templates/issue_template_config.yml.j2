@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+{% if model.documentation_url or model.routes %}
+contact_links:
+{% if model.documentation_url %}
+  - name: Documentation
+    url: {{ model.documentation_url | tojson }}
+    about: Check the project documentation before opening an issue.
+{% endif %}
+{% for route in model.routes %}
+  - name: {{ route.system | tojson }}
+    url: {{ route.url | tojson }}
+    about: Use this route for project support.
+{% endfor %}
+{% endif %}

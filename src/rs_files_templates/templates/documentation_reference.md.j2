@@ -1,0 +1,19 @@
+# Technical reference
+
+{% if model.programming_languages.entries %}## Implementation languages
+
+{% for language in model.programming_languages.entries %}- {{ language.name }}{% if language.version_constraint %} {{ language.version_constraint }}{% endif %}{% if language.role %} — {{ language.role }}{% endif %}
+{% endfor %}{% endif %}{% if model.software_functions.entries %}
+
+## Software functions
+
+{% for function in model.software_functions.entries %}### Function {{ loop.index }}
+
+{% if function.cmd %}Command: `{{ function.cmd }}`
+{% endif %}{% if function.note %}{{ function.note }}
+{% endif %}{% endfor %}{% endif %}{% if model.interfaces.entries %}
+
+## Interfaces
+
+{% for interface in model.interfaces.entries %}- **{{ interface.type }}**{% if interface.specification %}: {{ interface.specification }}{% endif %}{% if interface.status %} ({{ interface.status }}){% endif %}
+{% endfor %}{% endif %}
