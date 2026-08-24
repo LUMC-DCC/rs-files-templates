@@ -27,6 +27,7 @@ from .changelog import ChangelogModel
 from .citation import CitationModel
 from .code_of_conduct import CodeOfConductModel
 from .codemeta import CodeMetaModel
+from .contributing import ContributingModel
 from .governance import GovernanceModel
 from .license import LicenseModel
 from .security import SecurityModel
@@ -39,6 +40,7 @@ __all__ = [
     "CodeMetaModel",
     "CodeOfConductModel",
     "Containerization",
+    "ContributingModel",
     "DataFormat",
     "EdamTerm",
     "ExternalDependency",

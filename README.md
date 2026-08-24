@@ -14,6 +14,7 @@ Included generators:
 - `LICENSE`
 - `CHANGELOG.md`
 - `CODE_OF_CONDUCT.md`
+- `CONTRIBUTING.md`
 - `GOVERNANCE.md`
 - `SECURITY.md`
 - `SUPPORT.md`

@@ -1,0 +1,112 @@
+# Contributing
+
+Thank you for improving this project.
+
+## Workflow
+
+| Step | Rule |
+| --- | --- |
+| Branching | Create a short-lived branch from the target branch. |
+| Scope | Keep each branch focused on one bug, feature, or documentation change. |
+| Rebase | Rebase on the target branch before opening or updating the pull request. |
+| Pull request | Open a pull request for every change to the target branch. |
+| Review | Wait for maintainer review and passing CI before merge. |
+| Merge style | Keep history linear; do not merge the target branch into the feature branch. |
+
+Discuss larger changes in an issue before implementation. Use the repository's
+pull request template when one is available.
+{% if model.development_setup %}
+
+## Development setup
+
+```bash
+{% for command in model.development_setup %}
+{{ command }}
+{% endfor %}
+```
+{% if model.dependency_command %}
+
+Add a dependency with:
+
+```bash
+{{ model.dependency_command }}
+```
+{% endif %}
+{% endif %}
+{% if model.local_checks %}
+
+## Local checks
+
+| Check | Command |
+| --- | --- |
+{% for check in model.local_checks %}
+| {{ check.name }} | `{{ check.command }}` |
+{% endfor %}
+{% endif %}
+{% if model.ci_stages %}
+
+## Continuous integration
+
+CI runs on pushes and pull requests for the capabilities included in this
+repository.
+
+| Stage | Runs when | What it does |
+| --- | --- | --- |
+{% for stage in model.ci_stages %}
+| {{ stage.name }} | {{ stage.condition }} | {{ stage.behavior }} |
+{% endfor %}
+
+The branch must be up to date with the target branch and all required stages
+must pass before merge.
+{% endif %}
+
+## Commit messages
+
+Use Conventional Commits for commits that may be merged and for squash commit
+titles.
+
+| Prefix | Use for |
+| --- | --- |
+| `fix:` | Bug fixes |
+| `feat:` | User-facing features |
+| `docs:` | Documentation-only changes |
+| `test:` | Tests |
+| `refactor:` | Code changes without user-facing behavior changes |
+| `build:` | Build, packaging, or dependency changes |
+| `ci:` | Continuous integration changes |
+| `chore:` | Maintenance that does not affect users |
+
+An optional scope may clarify the affected component. Mark breaking changes
+with `!` or a `BREAKING CHANGE:` footer.
+
+## Pull request checklist
+
+- [ ] The branch is rebased on the target branch.
+- [ ] The pull request title follows Conventional Commits.
+- [ ] The change is focused and linked to an issue or decision when relevant.
+{% if model.has_metadata %}
+- [ ] Metadata is updated when public project information changed.
+{% endif %}
+{% if model.has_documentation %}
+- [ ] Documentation is updated when installation, usage, configuration, or behavior changed.
+{% endif %}
+{% if model.has_tests %}
+- [ ] Tests are added or updated for behavior changes.
+{% endif %}
+- [ ] Applicable local checks pass.
+- [ ] CI passes on the latest commit.
+{% if model.has_changelog %}
+- [ ] `CHANGELOG.md` has an entry when the change affects users.
+{% endif %}
+- [ ] No secrets, private data, or non-public security details are included.
+{% if model.has_distribution %}
+
+## Release flow
+
+Maintainers release from the target branch after CI passes. Release changes
+should update:
+{% for release_file in model.release_files %}
+
+- {{ release_file }}
+{% endfor %}
+{% endif %}

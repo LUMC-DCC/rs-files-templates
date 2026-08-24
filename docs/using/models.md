@@ -10,6 +10,7 @@ The current models are:
 - `LicenseModel`
 - `ChangelogModel`
 - `CodeOfConductModel`
+- `ContributingModel`
 - `GovernanceModel`
 - `SecurityModel`
 - `SupportModel`

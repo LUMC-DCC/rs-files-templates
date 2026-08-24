@@ -40,6 +40,8 @@ def _environment() -> Environment:
         undefined=StrictUndefined,
         keep_trailing_newline=True,
         autoescape=False,
+        trim_blocks=True,
+        lstrip_blocks=True,
     )
 
 

@@ -11,6 +11,7 @@ from rs_files_templates import (
     CitationModel,
     CodeMetaModel,
     CodeOfConductModel,
+    ContributingModel,
     GovernanceModel,
     LicenseModel,
     Person,
@@ -145,6 +146,44 @@ def test_zenodo_renders_normalized_json(author: Person) -> None:
     ]
 
 
+def test_contributing_maps_selected_tools_to_commands() -> None:
+    """Contributing guidance keeps command normalization out of the template."""
+    rendered = render_text(
+        ContributingModel(
+            project_manager="poetry",
+            quality_tools={"formatter": "ruff", "linter": "ruff", "type_checker": "mypy"},
+            test_frameworks={"entries": ["pytest"]},
+            test_types={"entries": ["Unit tests"]},
+            documentation_builder="sphinx",
+            documentation_types={"entries": ["user"]},
+            include_metadata=True,
+            licensing={"license": "MIT"},
+            community_files={"entries": ["CHANGELOG.md"]},
+            distribution_channels={"entries": ["PyPI", "Zenodo"]},
+        )
+    )
+    assert "poetry install" in rendered
+    assert "poetry add <package>" in rendered
+    assert "`poetry run ruff format --check .`" in rendered
+    assert "| Metadata | metadata is included | Validate generated metadata files. |" in rendered
+    assert "- .zenodo.json" in rendered
+    assert "\n\n\n" not in rendered
+
+
+def test_contributing_omits_unknown_tool_commands() -> None:
+    """Selected tools without a safe generic command do not produce guesses."""
+    rendered = render_text(
+        ContributingModel(
+            project_manager="rix",
+            quality_tools={"formatter": "styler", "linter": "clang-tidy"},
+            test_frameworks={"entries": ["GoogleTest"]},
+        )
+    )
+    assert "## Development setup" not in rendered
+    assert "## Local checks" not in rendered
+    assert "## Continuous integration" in rendered
+
+
 def test_all_models_render_without_template_expressions(tmp_path, author: Person) -> None:
     """Every shipped model renders its packaged template cleanly."""
     models = [
@@ -157,6 +196,7 @@ def test_all_models_render_without_template_expressions(tmp_path, author: Person
         ZenodoModel(project_name="Example", project_slug="example", authors={"entries": [author]}),
         ChangelogModel(),
         CodeOfConductModel(maintainers={"entries": [author]}),
+        ContributingModel(),
         GovernanceModel(maintainers={"entries": [author]}),
         LicenseModel(licensing={"license": "Custom project terms\nAll rights reserved."}),
         SecurityModel(maintainers={"entries": [author]}),
