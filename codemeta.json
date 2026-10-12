@@ -9,7 +9,7 @@
   "name": "rs-files-templates",
   "description": "Reusable typed templates and renderers for research software project files.",
   "version": "1.0.0",
-  "identifier": "https://doi.org/10.0000/replace-me",
+  "identifier": "https://github.com/LUMC-DCC/rs-files-templates",
   "author": [
     {
       "@id": "https://orcid.org/0000-0002-0852-4752",
