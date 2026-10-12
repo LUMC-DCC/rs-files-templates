@@ -33,6 +33,7 @@ dependencies = [
     "pyyaml>=6.0.2,<7.0",
     "referencing>=0.36,<1.0",
     "rsm-schema>=1.0.0,<2.0",
+    "rs-metadata (>=1.0.0,<2.0.0)",
 ]
 
 [project.urls]
