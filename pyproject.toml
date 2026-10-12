@@ -32,7 +32,7 @@ dependencies = [
     "pydantic>=2.13,<3.0",
     "pyyaml>=6.0.2,<7.0",
     "referencing>=0.36,<1.0",
-    "rsm-schema @ git+https://github.com/lumc-dcc/rsm-schema.git@main",
+    "rsm-schema>=1.0.0,<2.0",
 ]
 
 [project.urls]
