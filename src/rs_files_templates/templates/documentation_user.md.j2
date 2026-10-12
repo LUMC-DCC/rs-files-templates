@@ -3,6 +3,7 @@
 {% if model.project_short_description %}{{ model.project_short_description }}
 {% endif %}
 
+{% if model.installation_command or model.urls.documentation %}
 ## Installation
 
 {% if model.installation_command %}{{ model.installation_text }}
@@ -11,14 +12,13 @@
 {{ model.installation_command }}
 ```
 {% elif model.urls.documentation %}See the [project documentation]({{ model.urls.documentation }}) for installation instructions.
-{% else %}Installation instructions are not available in the supplied metadata.
-{% endif %}
+{% endif %}{% endif %}
 
+{% if model.usage_command or model.urls.documentation %}
 ## Run the software
 
-{% if model.usage_command %}```bash
+{% if model.usage_command %}```{{ model.usage_language }}
 {{ model.usage_command }}
 ```
 {% elif model.urls.documentation %}See the [project documentation]({{ model.urls.documentation }}) for usage instructions.
-{% else %}No runnable command has been supplied in the software-function metadata.
-{% endif %}
+{% endif %}{% endif %}

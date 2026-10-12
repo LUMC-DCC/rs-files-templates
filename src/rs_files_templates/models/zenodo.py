@@ -13,6 +13,7 @@ from .utils import (
     MAINTAINER_ROLES,
     PRINCIPAL_INVESTIGATOR_ROLES,
     contributors_with_roles,
+    metadata_keywords,
     primary_affiliation,
 )
 
@@ -24,6 +25,7 @@ _ZenodoRSM = rsm_template_base(
     "project_long_description",
     "licensing",
     "keywords",
+    "topics",
     "contributors",
     "funding",
     "publications",
@@ -150,7 +152,7 @@ class ZenodoModel(_ZenodoRSM):
             ),
             "creators": creators or [{"name": "Project team"}],
             "license": self.licensing.license or "",
-            "keywords": [str(keyword.root) for keyword in self.keywords.entries],
+            "keywords": metadata_keywords(self.keywords.entries, self.topics.entries),
             "contributors": self._contributors(),
             "grants": self._grants(),
             "related_identifiers": self._related_identifiers(),
