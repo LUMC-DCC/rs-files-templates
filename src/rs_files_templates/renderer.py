@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import json
 import zipfile
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
+from functools import partial
 from importlib.resources import files
 from io import BytesIO
 from pathlib import Path
@@ -38,7 +40,7 @@ class GeneratedFile:
 def _environment() -> Environment:
     """Create the package Jinja environment."""
     template_dir = files("rs_files_templates.templates")
-    return Environment(
+    environment = Environment(
         loader=FileSystemLoader(str(template_dir)),
         undefined=StrictUndefined,
         keep_trailing_newline=True,
@@ -46,6 +48,9 @@ def _environment() -> Environment:
         trim_blocks=True,
         lstrip_blocks=True,
     )
+    # Standalone files do not need Jinja's HTML-safe escaping of <, >, and &.
+    environment.filters["tojson"] = partial(json.dumps, ensure_ascii=False)
+    return environment
 
 
 def render_text(model: FileTemplateModel) -> str:

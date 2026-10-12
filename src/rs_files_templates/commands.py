@@ -180,3 +180,20 @@ TEST_COMMANDS = {
 def project_manager_profile(name: str) -> dict[str, Any]:
     """Return a copy of one canonical project-manager command profile."""
     return dict(PROJECT_MANAGER_PROFILES.get(str(name), {}))
+
+
+def python_installation_command(manager: str, package: str, *, published: bool) -> str:
+    """Return installation instructions for the selected Python environment manager."""
+    if published:
+        commands = {
+            "uv": "uv pip install",
+            "poetry": "poetry add",
+            "pdm": "pdm add",
+            "pixi": "pixi add --pypi",
+            "hatch": "hatch run python -m pip install",
+        }
+        return f"{commands.get(manager, 'python -m pip install')} {package}"
+    profile = PROJECT_MANAGER_PROFILES.get(manager)
+    if profile:
+        return "\n".join(profile["setup_commands"])
+    return "python -m pip install ."

@@ -11,6 +11,7 @@ from .utils import (
     AUTHOR_ROLES,
     MAINTAINER_ROLES,
     contributors_with_roles,
+    metadata_keywords,
     normalize_orcid,
     person_name,
     primary_affiliation,
@@ -26,6 +27,7 @@ _CitationRSM = rsm_template_base(
     "urls",
     "contributors",
     "keywords",
+    "topics",
     "persistent_identifiers",
     "publications",
 )
@@ -179,7 +181,7 @@ class CitationModel(_CitationRSM):
                 self._person(person)
                 for person in contributors_with_roles(self.contributors.entries, MAINTAINER_ROLES)
             ],
-            "keywords": [keyword.root for keyword in self.keywords.entries],
+            "keywords": metadata_keywords(self.keywords.entries, self.topics.entries),
             "identifiers": identifiers,
             "preferred_citation": preferred,
             "references": publications,

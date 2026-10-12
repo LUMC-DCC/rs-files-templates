@@ -79,7 +79,7 @@ def test_documentation_pages_render_as_independent_rsm_models(tmp_path) -> None:
         "[Data management](https://edamontology.org/topic_3071)"
         in (tmp_path / "overview.md").read_text()
     )
-    assert "python -m pip install ." in (tmp_path / "usage.md").read_text()
+    assert "uv sync" in (tmp_path / "usage.md").read_text()
     assert "uv sync --all-extras" in (tmp_path / "developer.md").read_text()
 
 
@@ -150,7 +150,7 @@ def test_readme_resolves_installation_and_support_from_rsm() -> None:
         )
     )
 
-    assert "python -m pip install example" in rendered
+    assert "uv pip install example" in rendered
     assert "example --help" in rendered
     assert "[`CITATION.cff`](CITATION.cff)" in rendered
     assert "[`SUPPORT.md`](SUPPORT.md)" in rendered

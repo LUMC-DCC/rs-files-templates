@@ -12,6 +12,7 @@ from .utils import (
     MAINTAINER_ROLES,
     PRINCIPAL_INVESTIGATOR_ROLES,
     contributors_with_roles,
+    metadata_keywords,
     normalize_orcid,
     organization_data,
     person_name,
@@ -287,11 +288,6 @@ class CodeMetaModel(_CodeMetaRSM):
         runtime_platforms: list[str] = []
         languages: list[Any] = []
         for language in self.programming_languages.entries:
-            label = language.name + (
-                f" {language.version_constraint}" if language.version_constraint else ""
-            )
-            if label not in runtime_platforms:
-                runtime_platforms.append(label)
             item = {"@type": "ComputerLanguage", "name": language.name}
             if language.version_constraint:
                 item["version"] = language.version_constraint
@@ -348,7 +344,7 @@ class CodeMetaModel(_CodeMetaRSM):
                     self.contributors.entries, PRINCIPAL_INVESTIGATOR_ROLES
                 )
             ],
-            "keywords": [x.root for x in self.keywords.entries],
+            "keywords": metadata_keywords(self.keywords.entries, self.topics.entries),
             "code_repository": repository or "https://example.org/REPLACE_WITH_REPOSITORY",
             "continuous_integration": f"{repository.rstrip('/')}/actions"
             if repository.startswith("https://github.com/") and self._has_generated_ci()

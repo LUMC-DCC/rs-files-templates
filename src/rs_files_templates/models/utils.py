@@ -3,12 +3,26 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+from typing import Any
 
 from rsm_schema.generated import Contributor, Organization, Person, Publication, Registry
 
 AUTHOR_ROLES = frozenset({"Original author", "Co-author"})
 MAINTAINER_ROLES = frozenset({"Maintainer"})
 PRINCIPAL_INVESTIGATOR_ROLES = frozenset({"Principal investigator"})
+
+
+def metadata_keywords(keywords: Iterable[Any], topics: Iterable[Any]) -> list[str]:
+    """Combine free-text keywords and EDAM topic labels, preserving their order."""
+    values = [str(keyword.root).strip() for keyword in keywords]
+    values.extend(str(topic.term).strip() for topic in topics if topic.term)
+    seen: set[str] = set()
+    result = []
+    for value in values:
+        if value and value.casefold() not in seen:
+            result.append(value)
+            seen.add(value.casefold())
+    return result
 
 
 def normalize_orcid(value: str | None) -> str:

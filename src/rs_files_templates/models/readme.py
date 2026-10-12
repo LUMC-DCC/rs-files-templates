@@ -12,6 +12,7 @@ from ..commands import (
     PROJECT_MANAGER_PROFILES,
     TEST_COMMANDS,
     TYPE_CHECKER_COMMANDS,
+    python_installation_command,
 )
 from .base import rsm_template_base
 
@@ -209,7 +210,9 @@ class ReadmeModel(_ReadmeRSM):
         if "pypi" in channels:
             return (
                 "Install the published package from PyPI:",
-                f"python -m pip install {slug.replace('_', '-')}",
+                python_installation_command(
+                    str(self.project_manager), slug.replace("_", "-"), published=True
+                ),
                 "bash",
             )
         if "cran" in channels:
@@ -230,7 +233,11 @@ class ReadmeModel(_ReadmeRSM):
             "poetry",
             "uv",
         }:
-            return "Install from a source checkout:", "python -m pip install .", "bash"
+            return (
+                "Install from a source checkout:",
+                python_installation_command(str(self.project_manager), slug, published=False),
+                "bash",
+            )
         if self.urls.repository:
             return (
                 "Clone the source repository:",
@@ -257,9 +264,15 @@ class ReadmeModel(_ReadmeRSM):
                 command += f"\n{declared}"
             return command, "r"
         if declared:
-            return declared, "bash"
+            prefix = PROJECT_MANAGER_PROFILES.get(str(self.project_manager), {}).get(
+                "run_prefix", ""
+            )
+            return f"{prefix}{declared}", "bash"
         if "python" in languages:
-            return f"python -m {slug}", "bash"
+            prefix = PROJECT_MANAGER_PROFILES.get(str(self.project_manager), {}).get(
+                "run_prefix", ""
+            )
+            return f"{prefix}python -m {slug}", "bash"
         return "", "bash"
 
     def _development(self) -> dict[str, Any]:
