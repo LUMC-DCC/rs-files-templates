@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+title: rs-files-templates
+message: "If you use this software, please cite it using the metadata in this file."
+type: software
+abstract: >-
+  Reusable typed templates and renderers for research software project files.
+authors:
+  - family-names: Steeghs-Turchina
+    given-names: Mariia
+    affiliation: Leiden University Medical Center
+    orcid: https://orcid.org/0000-0002-0852-4752
+version: 1.0.0
+repository-code: https://github.com/LUMC-DCC/rs-files-templates
+url: https://lumc-dcc.github.io/rs-files-templates/
+license: Apache-2.0
