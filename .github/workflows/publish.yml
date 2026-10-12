@@ -1,0 +1,120 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: Where to upload.
+        type: choice
+        options: [testpypi, pypi]
+        default: testpypi
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Set up project
+        uses: ./.github/actions/setup
+
+      - name: Tag matches the package version
+        if: github.event_name == 'release'
+        shell: bash
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          declared="$(poetry version --short)"
+          echo "tag=${TAG}  pyproject=${declared}"
+          if [ "${TAG#v}" != "${declared}" ]; then
+            echo "::error::Release tag ${TAG} does not match version ${declared}." >&2
+            exit 1
+          fi
+
+      - name: Build
+        run: poetry build
+
+      - name: Check the artifacts
+        shell: bash
+        run: |
+          pipx install twine
+          twine check --strict dist/*
+
+      - name: Wheel contains packaged templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m zipfile -l dist/*.whl
+          python -m zipfile -l dist/*.whl | grep -q 'rs_files_templates/templates/CITATION.cff.j2'
+          python -m zipfile -l dist/*.whl | grep -q 'rs_files_templates/templates/.zenodo.json.j2'
+
+      - name: Install the wheel outside the source tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m venv "${RUNNER_TEMP}/smoke"
+          "${RUNNER_TEMP}/smoke/bin/pip" install --quiet dist/*.whl
+          cd "${RUNNER_TEMP}"
+          "${RUNNER_TEMP}/smoke/bin/python" - <<'PY'
+          from rs_files_templates import CitationModel, render_text
+
+          rendered = render_text(CitationModel(project_slug="smoke-test"))
+          assert "smoke-test" in rendered
+          print("rs-files-templates wheel smoke test passed")
+          PY
+
+      - name: Upload distributions
+        uses: actions/upload-artifact@v7
+        with:
+          name: distributions
+          path: dist/
+
+  testpypi:
+    name: TestPyPI
+    needs: build
+    if: github.event_name == 'workflow_dispatch' && inputs.repository == 'testpypi'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/project/rs-files-templates/
+    permissions:
+      id-token: write
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v8
+        with:
+          name: distributions
+          path: dist/
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  pypi:
+    name: PyPI
+    needs: build
+    if: github.event_name == 'release' || inputs.repository == 'pypi'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: pypi
+      url: https://pypi.org/project/rs-files-templates/
+    permissions:
+      id-token: write
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v8
+        with:
+          name: distributions
+          path: dist/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
