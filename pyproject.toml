@@ -49,13 +49,13 @@ include = [
 ]
 
 [tool.poetry.group.dev.dependencies]
-pre-commit = ">=4.2,<5.0"
+pre-commit = ">=4.7.0,<5.0"
 pytest = ">=8.4,<10.0"
 pytest-cov = ">=6.2,<8.0"
-ruff = ">=0.16.10,<1.0"
+ruff = ">=0.17.1,<1.0"
 
 [tool.poetry.group.docs.dependencies]
-sphinx = ">=8.2,<9.0"
+sphinx = ">=9.1.0,<10.0"
 myst-parser = ">=5.1.0,<6.0"
 sphinx-book-theme = ">=1.4,<2.0"
 sphinx-copybutton = ">=0.5,<1.0"
